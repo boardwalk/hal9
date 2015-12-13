@@ -1,4 +1,4 @@
-module Main (main) where
+module Hal9.Backend (main) where
 
 import Control.Monad.Eff
 import Control.Monad.Eff.Console

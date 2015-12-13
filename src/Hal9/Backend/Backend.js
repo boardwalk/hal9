@@ -1,4 +1,4 @@
 "use strict";
 
-// module Main
+// module Hal9.Backend
 exports.stdout = process.stdout;
