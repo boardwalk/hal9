@@ -1,5 +1,6 @@
 module Main (main) where
 
+import Control.Monad.Eff
 import Control.Monad.Eff.Console
 import Data.Foldable
 import Node.Encoding
@@ -9,6 +10,7 @@ import Prelude
 
 foreign import stdout :: forall eff r a. Writable r eff a
 
+main :: Eff (console :: CONSOLE, http :: HTTP) Unit
 main = do
   server <- createServer respond
   listen server 8080 $ void do
@@ -33,10 +35,11 @@ main = do
               ]
         setStatusCode res 200
         setHeader res "Content-Type" "text/html"
-        void $ writeString outputStream UTF8 html (return unit)
+        writeString outputStream UTF8 html (return unit)
+        end outputStream (return unit)
       "POST" -> do
         setStatusCode res 200
         void $ pipe inputStream outputStream
       _ -> do
         setStatusCode res 405
-    end outputStream (return unit)
+        end outputStream (return unit)
