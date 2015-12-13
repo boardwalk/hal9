@@ -1,0 +1,16 @@
+{
+  "name": "hal9",
+  "description": "Like HAL 9000, but not as clever.",
+  "main": "index.js",
+  "authors": [
+    "Dan Skorupski <dan.skorupski@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/boardwalk/hal9",
+  "moduleType": [
+    "node"
+  ],
+  "dependencies": {
+    "purescript-node-http": "~0.1.7"
+  }
+}
