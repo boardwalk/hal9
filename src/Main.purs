@@ -1,7 +1,7 @@
 module Main (main) where
 
 import Control.Monad.Eff.Console
-import Data.Foldable (foldMap)
+import Data.Foldable
 import Node.Encoding
 import Node.HTTP
 import Node.Stream
@@ -20,7 +20,6 @@ main = do
     end (Node.HTTP.Client.requestAsStream req) (return unit)
   where
   respond req res = do
-    setStatusCode res 200
     let inputStream  = requestAsStream req
         outputStream = responseAsStream res
     log (requestMethod req <> " " <> requestURL req)
@@ -32,8 +31,12 @@ main = do
               , "  <input type='submit'>"
               , "</form>"
               ]
+        setStatusCode res 200
         setHeader res "Content-Type" "text/html"
-        writeString outputStream UTF8 html(return unit)
-        end outputStream (return unit)
-      "POST" -> void $ pipe inputStream outputStream
-  
+        void $ writeString outputStream UTF8 html (return unit)
+      "POST" -> do
+        setStatusCode res 200
+        void $ pipe inputStream outputStream
+      _ -> do
+        setStatusCode res 405
+    end outputStream (return unit)
