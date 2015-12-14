@@ -1,21 +1,18 @@
 module Hal9.Frontend (main) where
 
-import qualified Thermite as T
-import qualified React as R
-import qualified React.DOM as R
-import qualified React.DOM.Props as RP
+import Control.Monad.Eff
+import Data.Maybe.Unsafe
+import Data.Nullable
 import Prelude
 import qualified DOM as DOM
 import qualified DOM.HTML as DOM
---import qualified DOM.HTML.Document as DOM
 import qualified DOM.HTML.Types as DOM
 import qualified DOM.HTML.Window as DOM
 import qualified DOM.Node.ParentNode as DOM
---import qualified DOM.Node.Types as DOM
---import Data.Maybe
-import Data.Maybe.Unsafe
-import Data.Nullable (toMaybe)
-import Control.Monad.Eff
+import qualified React as R
+import qualified React.DOM as R
+import qualified React.DOM.Props as RP
+import qualified Thermite as T
 
 data Action = Increment | Decrement
 
