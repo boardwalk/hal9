@@ -1,7 +1,7 @@
 {
   "name": "hal9",
   "description": "Like HAL 9000, but not as clever.",
-  "main": "output/Main/index.js",
+  "main": "output/Hal9.Backend/index.js",
   "authors": [
     "Dan Skorupski <dan.skorupski@gmail.com>"
   ],
@@ -12,6 +12,7 @@
   ],
   "dependencies": {
     "purescript-node-http": "~0.1.7",
-    "purescript-console": "~0.1.1"
+    "purescript-console": "~0.1.1",
+    "purescript-thermite": "~0.12.0"
   }
 }
