@@ -9,6 +9,7 @@ import qualified DOM.HTML as DOM
 import qualified DOM.HTML.Types as DOM
 import qualified DOM.HTML.Window as DOM
 import qualified DOM.Node.ParentNode as DOM
+import qualified Hal9.Common as Common
 import qualified React as R
 import qualified React.DOM as R
 import qualified React.DOM.Props as RP
