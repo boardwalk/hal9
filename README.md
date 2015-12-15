@@ -4,13 +4,13 @@ Like HAL 9000, but not as clever.
 
 ## Instructions
 
-1. Install purescript and bower
+1. Install required NPM packages
 
 ```sh
 npm install -g purescript bower browserify
 ```
 
-2. Install bower components
+2. Install Bower components
 
 ```sh
 bower install
