@@ -7,7 +7,6 @@ import Node.Encoding
 import Node.HTTP
 import Node.Stream
 import Prelude
-import qualified Hal9.Common as Common
 
 foreign import stdout :: forall eff r a. Writable r eff a
 

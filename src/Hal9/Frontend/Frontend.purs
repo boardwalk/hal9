@@ -9,7 +9,6 @@ import qualified DOM.HTML as DOM
 import qualified DOM.HTML.Types as DOM
 import qualified DOM.HTML.Window as DOM
 import qualified DOM.Node.ParentNode as DOM
-import qualified Hal9.Common as Common
 import qualified React as R
 import qualified React.DOM as R
 import qualified React.DOM.Props as RP
@@ -22,7 +21,7 @@ type State = { counter :: Int }
 initialState :: State
 initialState = { counter: 0 }
 
-render :: T.Render State _ Action
+render :: forall a. T.Render State a Action
 render dispatch _ state _ =
   [ R.p' [ R.text "Value: "
          , R.text $ show state.counter
@@ -34,11 +33,11 @@ render dispatch _ state _ =
          ]
   ]
 
-performAction :: T.PerformAction _ State _ Action
+performAction :: forall a b. T.PerformAction a State b Action
 performAction Increment _ state update = update $ state { counter = state.counter + 1 }
 performAction Decrement _ state update = update $ state { counter = state.counter - 1 }
 
-spec :: T.Spec _ State _ Action
+spec :: forall a b. T.Spec a State b Action
 spec = T.simpleSpec performAction render
 
 main :: Eff (dom :: DOM.DOM) Unit
