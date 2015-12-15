@@ -15,7 +15,11 @@
     "purescript-foreign": "~0.7.2",
     "purescript-foreign-generic": "~0.3.0",
     "purescript-generics": "~0.7.0",
-    "purescript-node-http": "~0.1.7",
-    "purescript-thermite": "~0.12.0"
+    "purescript-thermite": "~0.12.0",
+    "purescript-rest": "~0.4.1"
+  },
+  "resolutions": {
+    "purescript-strings": "^0.7.0",
+    "purescript-maps": "~0.5.2"
   }
 }

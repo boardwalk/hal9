@@ -1,17 +1,19 @@
-module Hal9.Common (readGeneric, toForeignGeneric) where
+module Hal9.Common (readJSONGeneric, toJSONGeneric) where
 
 import Data.Either (Either(..))
-import Data.Foreign (Foreign())
 import Data.Generic (Generic)
 import Data.Maybe.Unsafe (unsafeThrow)
 import Prelude
 import qualified Data.Foreign.Generic as FG
 
-readGeneric :: forall a. (Generic a) => Foreign -> a
-readGeneric = FG.readGeneric FG.defaultOptions >>> fromRight
+options :: FG.Options
+options = FG.defaultOptions { unwrapNewtypes = true }
 
-toForeignGeneric :: forall a. (Generic a) => a -> Foreign
-toForeignGeneric = FG.toForeignGeneric FG.defaultOptions
+readJSONGeneric :: forall a. (Generic a) => String -> a
+readJSONGeneric = FG.readJSONGeneric options >>> fromRight
+
+toJSONGeneric :: forall a. (Generic a) => a -> String
+toJSONGeneric = FG.toJSONGeneric options
 
 fromRight :: forall a b. Either a b -> b
 fromRight (Left _) = unsafeThrow "fromRight called on Left"

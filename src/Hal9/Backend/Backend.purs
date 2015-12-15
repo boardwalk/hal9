@@ -1,45 +1,37 @@
 module Hal9.Backend (main) where
 
-import Control.Monad.Eff
-import Control.Monad.Eff.Console
-import Data.Foldable
-import Node.Encoding
-import Node.HTTP
-import Node.Stream
+import Control.Apply ((*>))
+import Control.Monad.Eff (Eff())
+import Data.Generic (Generic)
+import Hal9.Common
 import Prelude
+import qualified Node.HTTP as Node
+import REST.Endpoint
+import REST.Server (serve)
 
-foreign import stdout :: forall eff r a. Writable r eff a
+data User = User { name :: String, age :: Int }
+derive instance genericUser :: Generic User
 
-main :: Eff (console :: CONSOLE, http :: HTTP) Unit
-main = do
-  server <- createServer respond
-  listen server 8080 $ void do
-    log "Listening on port 8080."
-    req <- Node.HTTP.Client.requestFromURI "http://localhost:8080/" \response -> void do
-      log "Response from GET /:"
-      let responseStream = Node.HTTP.Client.responseAsStream response
-      pipe responseStream stdout
-    end (Node.HTTP.Client.requestAsStream req) (return unit)
+defaultUser :: User
+defaultUser =
+  User
+  { name: "Dan"
+  , age: 29
+  }
+
+home :: forall e eff. (Endpoint e) => e (Eff (http :: Node.HTTP | eff) Unit)
+home = worker <$> (get *> response)
   where
-  respond req res = do
-    let inputStream  = requestAsStream req
-        outputStream = responseAsStream res
-    log (requestMethod req <> " " <> requestURL req)
-    case requestMethod req of
-      "GET" -> do
-        let html = foldMap (<> "\n")
-              [ "<form method='POST' action='/'>"
-              , "  <input name='text' type='text'>"
-              , "  <input type='submit'>"
-              , "</form>"
-              ]
-        setStatusCode res 200
-        setHeader res "Content-Type" "text/html"
-        writeString outputStream UTF8 html (return unit)
-        end outputStream (return unit)
-      "POST" -> do
-        setStatusCode res 200
-        void $ pipe inputStream outputStream
-      _ -> do
-        setStatusCode res 405
-        end outputStream (return unit)
+  worker res = sendResponse res 200 "text/plain" "Hello, world!"
+
+userById :: forall e eff. (Endpoint e) => e (Eff (http :: Node.HTTP | eff) Unit)
+userById = worker <$> (get *> lit "users" *> match "id" "User identifier") <*> response
+  where
+  worker userId res = sendResponse res 200 "text/plain" (toJSONGeneric userId)
+
+endpoints :: forall e eff. (Endpoint e) => Array (e (Eff (http :: Node.HTTP | eff) Unit))
+endpoints = [ home, userById ]
+
+main :: forall e. Eff (http :: Node.HTTP | e) Unit
+main = do
+  serve endpoints 8080 do return unit
